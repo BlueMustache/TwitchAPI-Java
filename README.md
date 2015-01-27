@@ -7,8 +7,8 @@ This is a API for Twitch without any frameworks needed
 
 
 #Getting started
-https://github.com/fillefilip8/Twitch-API-Java/wiki
+https://github.com/fillefilip8/TwitchAPI-Java/wiki
 
-# Visit our website: http://fillefilip8.github.io/Twitch-API-Java
+# Visit our website: http://fillefilip8.github.io/TwitchAPI-Java
 
 
