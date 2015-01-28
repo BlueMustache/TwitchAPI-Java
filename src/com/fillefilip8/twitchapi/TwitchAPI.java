@@ -2,6 +2,7 @@ package com.fillefilip8.twitchapi;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,23 +21,31 @@ import javax.net.ssl.HttpsURLConnection;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class TwitchAPI {
 	private String client_id;
+	private String client_secret;
 	private int port;
 	private List<String> scopes = new ArrayList<String>();
+	private boolean debug;
+	private User currentLoggedInUser;
 	/**
 	 * Create a application on http://www.twitch.tv/settings/connections
 	 * Make sure the redirect url needs to be http://localhost:[port]
 	 * @param client_id Application Client ID
 	 * @param port http://localhost:[port]
 	 */
-public TwitchAPI(String client_id, int port, String[] scopes){
+public TwitchAPI(String client_id, String client_secret, int port, String[] scopes){
 	this.client_id = client_id;
+	this.client_secret = client_secret;
 	this.port = port;
 }
 public String getClientID(){
 	return client_id;
+}
+public String getClientSecret(){
+	return client_secret;
 }
 public int getPort(){
 	return port;	
@@ -45,20 +54,13 @@ public List<String> getScopes(){
 	return scopes;
 	
 }
-public void authUser() throws IOException, URISyntaxException{
-	Desktop.getDesktop().browse(new URI("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id="+getClientID()+"&redirect_uri=http://localhost:" + getPort() + "&scope=channel_read"));
-
-try {
-	waitForToken();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+public void setDebug(boolean debug){
+	this.debug = debug;
+	
 }
+public User authUser() throws IOException, URISyntaxException, ParseException{
+	Desktop.getDesktop().browse(new URI("https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id="+getClientID()+"&redirect_uri=http://localhost:" + getPort() + "&scope=channel_read"));
 
-
-
-public void waitForToken() throws Exception {
 	ServerSocket serverSock = new ServerSocket(getPort());
 	Socket sock = serverSock.accept();
 
@@ -87,6 +89,48 @@ public void waitForToken() throws Exception {
 	br.close();
 	out.close();
 	serverSock.close();
+	
+	
+	String url = "https://api.twitch.tv/kraken/oauth2/token";
+	URL obj = new URL(url);
+	HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+	//add reuqest header
+	con.setRequestMethod("POST");
+	con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.91 Safari/537.36");
+	con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+	String urlParameters = "client_id=" + getClientID() + "&client_secret=" + getClientSecret() + "&grant_type=authorization_code&redirect_uri=http://localhost:" + getPort() + "&code=" + code;
+
+	// Send post request
+	con.setDoOutput(true);
+	DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+	wr.writeBytes(urlParameters);
+	wr.flush();
+	wr.close();
+
+	int responseCode = con.getResponseCode();
+	if(debug){
+	System.out.println("\nSending 'Accesscode' request to URL : " + url);
+	System.out.println("Post parameters : " + urlParameters);
+	System.out.println("Response Code : " + responseCode);
+	}
+	BufferedReader in = new BufferedReader(
+	        new InputStreamReader(con.getInputStream()));
+	String inputLine;
+	StringBuffer response = new StringBuffer();
+
+	while ((inputLine = in.readLine()) != null) {
+		response.append(inputLine);
+	}
+	in.close();
+	JSONObject json;
+	JSONParser parser = new JSONParser();
+	json = (JSONObject) parser.parse(response.toString());
+	
+	System.out.println(json.get("access_token"));
+	currentLoggedInUser = new User(json.get("access_token").toString());
+	return new User(json.get("access_token").toString());
 }
 /**
  * 
@@ -168,8 +212,4 @@ return streamers;
 
 
 
-}
-	public static void login() throws IOException, org.json.simple.parser.ParseException {
-		
-		
 }}

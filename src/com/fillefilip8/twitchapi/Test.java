@@ -11,9 +11,10 @@ import org.json.simple.parser.ParseException;
 public class Test {
 public static void main(String[] args) throws IOException, ParseException, InterruptedException {
 	String[] yay = {"",""};
-TwitchAPI api = new TwitchAPI("r2eqpoppz3x65mohui205olf6vonqh9", 1234, yay);
+TwitchAPI api = new TwitchAPI("r2eqpoppz3x65mohui205olf6vonqh9", "66mffgogtr8zkl9pflrhdoc92btlpfk", 1234, yay);
 try {
-	api.authUser();
+	User user = api.authUser();
+	System.out.println(user.getChannel().getFollowerCount());
 } catch (URISyntaxException e) {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
