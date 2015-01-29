@@ -18,8 +18,8 @@ https://github.com/fillefilip8/TwitchAPI-Java/wiki
 
 
 #Come to our IRC
-http://webchat.freenode.net/?channels=%23twitchapijava
+http://cgiirc.synirc.net #twitchapijava
 
 OR
 
-irc.freenode.net #twitchapijava
+irc.synirc.net #twitchapijava
