@@ -14,7 +14,7 @@ https://github.com/fillefilip8/TwitchAPI-Java/wiki
 
 #Licence
 * You are not allowed to reupload the API
-* You are allowed to sell this API
+* You are not allowed to sell this API
 
 
 #Come to our IRC
