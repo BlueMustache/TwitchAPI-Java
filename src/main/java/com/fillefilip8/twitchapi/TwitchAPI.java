@@ -14,12 +14,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class TwitchAPI {
 	private String client_id;
@@ -168,8 +170,40 @@ return streamers;
 
 
 
+	}
+
+
+
+@Deprecated
+public static Stream getRandomStream(String game, int maxViewers) throws IOException, ParseException{
+	//https://api.twitch.tv/kraken/streams?game=Minecraft&limit=1&offset=1
+	Random r = new Random();
+	int R = r.nextInt(1000-1) + 1;
+	URL url = new URL("https://api.twitch.tv/kraken/streams?game=" + game +  "&limit=1" + "&offset=" + maxViewers);
+
+	HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+	try {
+		Desktop.getDesktop().browse(con.getURL().toURI());
+	} catch (URISyntaxException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	// optional default is GET
+	con.setRequestMethod("GET");
+
+	//add request header
+	con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+	int responseCode = con.getResponseCode();
+	System.out.println("\nSending 'GetRandomStream' request for with URL: " + url);
+	System.out.println("Response Code : " + responseCode);
+
+	BufferedReader in = new BufferedReader(
+	        new InputStreamReader(con.getInputStream()));
+	JSONParser parser = new JSONParser();
+	JSONObject json = (JSONObject) parser.parse(in);
+	System.out.println(json);
+	in.close();
+	return null;
+	
 }
-	public static void login() throws IOException, org.json.simple.parser.ParseException {
-		
-		
-}}
+}

@@ -10,14 +10,8 @@ import org.json.simple.parser.ParseException;
 
 public class Test {
 public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-	String[] yay = {"",""};
-TwitchAPI api = new TwitchAPI("r2eqpoppz3x65mohui205olf6vonqh9", 1234, yay);
-try {
-	api.authUser();
-} catch (URISyntaxException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-}
+Channel channel = new Channel("CreeperJo");
+System.out.println(channel.toString());
 
 	}
 

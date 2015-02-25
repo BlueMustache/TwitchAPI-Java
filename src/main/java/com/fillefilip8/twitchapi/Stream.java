@@ -1,12 +1,12 @@
 package com.fillefilip8.twitchapi;
 
 public class Stream {
-	private int viewers;
+	private long viewers;
 	private String status = "";
 	private String game = "";
 	private String channelName;
 private static Channel channel;
-	public Stream(String channelName, String game, int viewers, String status) {
+	public Stream(String channelName, String game, long viewers, String status) {
 		this.game = game;
 		this.status = status;
 		this.viewers = viewers;
@@ -24,7 +24,7 @@ private static Channel channel;
 
 	}
 
-	public int getViewers() {
+	public long getViewers() {
 		return viewers;
 	}
 
