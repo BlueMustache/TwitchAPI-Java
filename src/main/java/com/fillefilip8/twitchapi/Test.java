@@ -9,9 +9,19 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 public class Test {
-public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-Channel channel = new Channel("CreeperJo");
-System.out.println(channel.toString());
+public static void main(String[] args) throws IOException, ParseException, InterruptedException, URISyntaxException {
+	List<Stream> list = TwitchAPI.getAllGameStreamers("Minecraft", 10, 1, true);
+	//System.out.println(list.get(0).getChannel().getViews());
+
+	//System.out.println(user.getChannel().getFollowerCount());
+	/*
+Channel channel = new Channel("chapMAD");
+if(channel.isStreaming()){
+	System.out.println(channel.getChannelName() + " is streaming " + channel.getStream().getGame() + " with " + channel.getStream().getViewers() + "Viewers " + "Title: " + channel.getStream().getStatus());
+}else{
+	System.out.println(channel.getChannelName() + " is not streaming!");
+}*/
+
 
 	}
 

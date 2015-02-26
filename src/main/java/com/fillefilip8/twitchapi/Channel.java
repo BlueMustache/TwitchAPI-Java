@@ -39,10 +39,7 @@ private static int views;
 		in.close();
 		JSONObject stream = (JSONObject) json.get("stream");
 		System.out.println(stream.get("viewers"));
-		
-		
-		
-		return new Stream(getChannelName(), (String)stream.get("game"), (long)stream.get("viewers"), getStatus());
+		return new Stream(getChannelName());
 	}
 	public boolean isStreaming() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
@@ -129,5 +126,84 @@ private static int views;
 			}
 			return result;
 		}
+	public String getLanguage() throws IOException, ParseException{
+		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'Language' request for " + channelName + " with URL: " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(in);
+		in.close();
+		return (String)json.get("broadcaster_language");
+	}
+	public URL getURL() throws IOException, ParseException{
+		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'URL' request for " + channelName + " with URL: " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(in);
+		in.close();
+		
+		return new URL((String)json.get("url"));
+	}
+	public boolean isPartner() throws IOException, ParseException{
+		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'URL' request for " + channelName + " with URL: " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(in);
+		in.close();
+		
+		return (boolean)json.get("partner");
+	}
+	public long getViews() throws IOException, ParseException{
+		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'URL' request for " + channelName + " with URL: " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(in);
+		in.close();
+		
+		return (long)json.get("views");
+	}
 
 }

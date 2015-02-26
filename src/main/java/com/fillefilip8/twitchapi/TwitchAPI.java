@@ -2,6 +2,8 @@ package com.fillefilip8.twitchapi;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,6 +29,7 @@ public class TwitchAPI {
 	private String client_id;
 	private int port;
 	private List<String> scopes = new ArrayList<String>();
+	private String access_token;
 	/**
 	 * Create a application on http://www.twitch.tv/settings/connections
 	 * Make sure the redirect url needs to be http://localhost:[port]
@@ -44,18 +47,64 @@ public int getPort(){
 	return port;	
 }
 public List<String> getScopes(){
-	return scopes;
-	
+	return scopes;	
 }
+
 public void authUser() throws IOException, URISyntaxException{
 	Desktop.getDesktop().browse(new URI("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id="+getClientID()+"&redirect_uri=http://localhost:" + getPort() + "&scope=channel_read"));
 
-try {
-	waitForToken();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
+//Server Stuff
+	ServerSocket serverSock = new ServerSocket(getPort());
+	Socket sock = serverSock.accept();
+
+	InputStream sis = sock.getInputStream();
+	BufferedReader br = new BufferedReader(new InputStreamReader(sis));
+	String request = br.readLine(); // Now you get GET index.html HTTP/1.1`
+	String[] requestParam = request.split(" ");
+	String re = requestParam[1];
+	System.out.println(re);
+	String code = "";
+	for (int i=7;i<re.indexOf('&');i++) code=code+re.charAt(i);
+	System.out.println("Code: "+code);
+	access_token = code;
+	PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
+	
+	/*out.write("HTTP/1.0 200 OK\r\n");
+    out.write("Content-Type: text/html\r\n");
+    out.write("\r\n");
+    out.write("<TITLE>Success</TITLE>");
+   // out.write("<P>Please Read the URL in your browser. It will have a '#' and \"access_token=SOMETHING\" - This something is your Auth token. It might say that the access got denied - it means it got denied.</P>");
+	out.write("You have successfully logged in! - The application will now get your access_token!");
+	out.write("<br>");
+	out.write("Your access_token: " + code);
+    out.write("<p style='color: lime'>You can now close this tab or click <a href='http://google.com'>Here!</a></p>");
+    out.write("<footer>");
+    out.write("<h2>Powered by TwitchAPI for Java</h2>");
+    out.write("</footer>");*/
+	try {
+		File file = new File("success.html");
+		FileReader fileReader = new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		StringBuffer stringBuffer = new StringBuffer();
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+			stringBuffer.append(line);
+			out.write(line);
+			stringBuffer.append("\n");
+		}
+		fileReader.close();
+		System.out.println(stringBuffer.toString());
+	} catch (IOException e) {
 		e.printStackTrace();
 	}
+    out.flush();
+	
+
+	
+	br.close();
+	out.close();
+	serverSock.close();
+	//return new User(code);
 }
 
 
@@ -74,7 +123,7 @@ public void waitForToken() throws Exception {
 	String code = "";
 	for (int i=7;i<re.indexOf('&');i++) code=code+re.charAt(i);
 	System.out.println("Code: "+code);
-
+	access_token = code;
 	PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
 	
 	out.write("HTTP/1.0 200 OK\r\n");
@@ -139,11 +188,12 @@ public static List<Stream> getAllGameStreamers(String game,int total, int maxVie
 	    	channel = (JSONObject) yay.get("channel");
 	    	
 	    	
-		     streamers.add(new Stream((String)channel.get("display_name"),(String)channel.get("game"), 1, (String)channel.get("status")));
-		     System.out.println("Added " + channel.get("display_name") + " to the ArrayList");
+		     streamers.add(new Stream((String)channel.get("display_name")));
+		     
 		    //System.out.println(streamers.get(i).getChannel().getFollowerCount());
 		     //streamsI.remove();
 	    	if(debug){
+	    		System.out.println("Added " + channel.get("display_name") + " to the ArrayList");
 	    	//String viewers = streamsI.next().get("viewers").toString();
 	      System.out.println(channel.get("display_name") + " is playing " + channel.get("game") + "with title " +  channel.get("status") + " for " + yay.get("viewers") + "Viewers"); 
 	    	}
