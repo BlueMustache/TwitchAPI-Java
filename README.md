@@ -2,10 +2,6 @@
 This is a API for Twitch without any frameworks needed
 
 
-# Dependencies
-* json-simple = https://code.google.com/p/json-simple/
-
-
 #Getting started
 https://github.com/fillefilip8/TwitchAPI-Java/wiki
 

@@ -260,4 +260,11 @@ public static Stream getRandomStream(String game, int maxViewers) throws IOExcep
 	return null;
 	
 }
+<<<<<<< HEAD:src/main/java/com/fillefilip8/twitchapi/TwitchAPI.java
 }
+=======
+	public static void login() throws IOException, org.json.simple.parser.ParseException {
+		
+		
+}}
+>>>>>>> b72459e523cbd8bc7279460990b65a7cd7369459:src/com/fillefilip8/twitchapi/TwitchAPI.java
