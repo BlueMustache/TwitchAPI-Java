@@ -39,9 +39,10 @@ public class Stream {
 		//add request header
 		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'Stream' request for " + channelName + " with URL: " + url);
+		if(TwitchAPI.debug){
+		System.out.println("\nSending 'Viewers' request for " + channelName + " with URL: " + url);
 		System.out.println("Response Code : " + responseCode);
-
+		}
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		JSONParser parser = new JSONParser();
@@ -59,9 +60,10 @@ public class Stream {
 		//add request header
 		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'Stream' request for " + channelName + " with URL: " + url);
+		if(TwitchAPI.debug){
+		System.out.println("\nSending 'Game' request for " + channelName + " with URL: " + url);
 		System.out.println("Response Code : " + responseCode);
-
+		}
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		JSONParser parser = new JSONParser();
@@ -80,6 +82,27 @@ public class Stream {
 	 */
 	public String getStatus() throws IOException, ParseException {
 		return getChannel().getStatus();
+	}
+	public long getStreamQuality() throws IOException, ParseException{
+		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+		int responseCode = con.getResponseCode();
+		if(TwitchAPI.debug){
+		System.out.println("\nSending 'Stream' request for " + channelName + " with URL: " + url);
+		System.out.println("Response Code : " + responseCode);
+		}
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(in);
+		in.close();
+		JSONObject stream = (JSONObject) json.get("stream");
+		return (long)stream.get("video_height");
 	}
 
 }

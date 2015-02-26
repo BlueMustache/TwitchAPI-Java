@@ -30,6 +30,7 @@ public class TwitchAPI {
 	private int port;
 	private List<String> scopes = new ArrayList<String>();
 	private String access_token;
+	static boolean debug = false;
 	/**
 	 * Create a application on http://www.twitch.tv/settings/connections
 	 * Make sure the redirect url needs to be http://localhost:[port]
@@ -49,7 +50,9 @@ public int getPort(){
 public List<String> getScopes(){
 	return scopes;	
 }
-
+public void setDebug(boolean debug){
+	this.debug = debug;
+}
 public void authUser() throws IOException, URISyntaxException{
 	Desktop.getDesktop().browse(new URI("https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id="+getClientID()+"&redirect_uri=http://localhost:" + getPort() + "&scope=channel_read"));
 
@@ -147,7 +150,7 @@ public void waitForToken() throws Exception {
  * @throws IOException
  * @throws org.json.simple.parser.ParseException
  */
-public static List<Stream> getAllGameStreamers(String game,int total, int maxViewers, boolean debug) throws IOException, org.json.simple.parser.ParseException{
+public static List<Stream> getAllGameStreamers(String game,int total, int maxViewers) throws IOException, org.json.simple.parser.ParseException{
 	List<Stream> streamers = new ArrayList<Stream>();
 	URL url = new URL("https://api.twitch.tv/kraken/streams?game=" + game + "&limit=" + total + "&offset=" + maxViewers);
 	HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -157,9 +160,10 @@ public static List<Stream> getAllGameStreamers(String game,int total, int maxVie
 	//add request header
 	con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
 	int responseCode = con.getResponseCode();
+	if(TwitchAPI.debug){
 	System.out.println("\nSending 'GET' request to URL : " + url);
 	System.out.println("Response Code : " + responseCode);
-
+	}
 	BufferedReader in = new BufferedReader(
 	        new InputStreamReader(con.getInputStream()));
 	StringBuffer response = new StringBuffer();
@@ -192,7 +196,7 @@ public static List<Stream> getAllGameStreamers(String game,int total, int maxVie
 		     
 		    //System.out.println(streamers.get(i).getChannel().getFollowerCount());
 		     //streamsI.remove();
-	    	if(debug){
+	    	if(TwitchAPI.debug){
 	    		System.out.println("Added " + channel.get("display_name") + " to the ArrayList");
 	    	//String viewers = streamsI.next().get("viewers").toString();
 	      System.out.println(channel.get("display_name") + " is playing " + channel.get("game") + "with title " +  channel.get("status") + " for " + yay.get("viewers") + "Viewers"); 

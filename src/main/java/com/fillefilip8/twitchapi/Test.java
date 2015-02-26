@@ -10,8 +10,8 @@ import org.json.simple.parser.ParseException;
 
 public class Test {
 public static void main(String[] args) throws IOException, ParseException, InterruptedException, URISyntaxException {
-	List<Stream> list = TwitchAPI.getAllGameStreamers("Minecraft", 10, 1, true);
-	//System.out.println(list.get(0).getChannel().getViews());
+	List<Stream> list = TwitchAPI.getAllGameStreamers("Minecraft", 1, 1);
+	System.out.println(list.get(0).getStreamQuality());
 
 	//System.out.println(user.getChannel().getFollowerCount());
 	/*
