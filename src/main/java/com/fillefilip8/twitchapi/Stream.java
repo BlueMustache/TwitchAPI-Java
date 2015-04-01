@@ -12,8 +12,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class Stream {
+	private long viewers;
+	private String game = "";
 	private String channelName;
-	protected Stream(String channelName) {
+	public Stream(String channelName) {
+		//this.game = game;
+		//this.viewers = viewers;
 		this.channelName = channelName;
 	}
 
@@ -25,9 +29,7 @@ public class Stream {
 	public Channel getChannel() {
 		return new Channel(channelName);
 	}
-	/**
-	 * Get the current viewers of the stream
-	 */
+
 	public long getViewers() throws IOException, ParseException {
 		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -49,9 +51,6 @@ public class Stream {
 		JSONObject stream = (JSONObject) json.get("stream");
 		return (long)stream.get("viewers");
 	}
-	/**
-	 * Get the current game that is being played on the stream
-	 */
 	public String getGame() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -84,13 +83,6 @@ public class Stream {
 	public String getStatus() throws IOException, ParseException {
 		return getChannel().getStatus();
 	}
-	/*
-	 * Get the Video Quality of the stream
-	 * Examples:
-	 * 1080p
-	 * 720p
-	 * 480p
-	 */
 	public long getStreamQuality() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
