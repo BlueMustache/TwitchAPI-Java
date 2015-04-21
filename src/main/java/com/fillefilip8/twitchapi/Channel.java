@@ -15,8 +15,6 @@ import org.json.simple.parser.ParseException;
 
 public class Channel {
 private String channelName;
-private static long followers;
-private static int views;
 	public Channel(String channelName){
 		this.channelName = channelName;
 	}
