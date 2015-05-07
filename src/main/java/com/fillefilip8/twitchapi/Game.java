@@ -7,6 +7,10 @@ import java.net.URL;
 
 public class Game {
 	private String name;
+	/**
+	 * 
+	 * @param name
+	 */
 	public Game(String name){
 		this.name = name;
 	}
@@ -16,15 +20,14 @@ public class Game {
 	 * @throws IOException
 	 */
 	public boolean exists() throws IOException{
-		String htmlName = name.replaceAll(" ", "%20");
-		URL url = new URL("http://static-cdn.jtvnw.net/ttv-boxart/" + htmlName + "-272x380.jpg");
+		URL url = new URL("http://static-cdn.jtvnw.net/ttv-boxart/" + convertStringToURL() + "-272x380.jpg");
 	    HttpURLConnection huc =  (HttpURLConnection)  url.openConnection(); 
-	    huc.setRequestMethod("HEAD");
+	    huc.setRequestMethod("GET");
 	    huc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
 	    huc.connect(); 
 	    System.out.println(huc.getResponseCode());
 	    System.out.println(huc.getResponseMessage());
-	    System.out.println(huc.getHeaderField("Location"));
+	    System.out.println("Redirect: " + huc.getHeaderField("Location"));
 	    System.out.println(huc.getHeaderFields());
 	    if(huc.getResponseCode() == 404){
 	    	return false;
@@ -33,12 +36,15 @@ public class Game {
 	    }
 	    
 	}
+	/**
+	 * Get the URL of the BoxArt image
+	 * @return URL of BoxArt
+	 * @throws MalformedURLException
+	 */
 	public URL getBoxArt() throws MalformedURLException{
-		//http://static-cdn.jtvnw.net/ttv-boxart/World%20of%20Warcraft:%20Warlords%20of%20Draenor-272x380.jpg
-		String htmlName = name.replaceAll(" ", "%20");
-		URL url = new URL("http://static-cdn.jtvnw.net/ttv-boxart/" + htmlName + "-272x380.jpg");
-
-		return url;
-		
+		return new URL("http://static-cdn.jtvnw.net/ttv-boxart/" + convertStringToURL() + "-272x380.jpg");		
+	}
+	public String convertStringToURL(){
+		return name.replaceAll(" ", "%20");
 	}
 }

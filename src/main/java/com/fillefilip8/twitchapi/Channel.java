@@ -3,23 +3,21 @@ package com.fillefilip8.twitchapi;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class Channel {
-private String channelName;
+	private String channelName;
 	public Channel(String channelName){
 		this.channelName = channelName;
 	}
 	public Stream getStream() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
+	/*	URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -37,9 +35,15 @@ private String channelName;
 		JSONObject json = (JSONObject) parser.parse(in);
 		in.close();
 		JSONObject stream = (JSONObject) json.get("stream");
-		System.out.println(stream.get("viewers"));
+		*/
 		return new Stream(getChannelName());
 	}
+	/**
+	 * Is the channel livestreaming right now?
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public boolean isStreaming() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -59,12 +63,17 @@ private String channelName;
 		JSONObject json = (JSONObject) parser.parse(in);
 		in.close();
 		if(json.get("stream") !=null){
-			return true;
-			
+			return true;	
 		}else{
 			return false;
 		}
 	}
+	/**
+	 * Get how many followers this channel got
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public long getFollowerCount() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -82,7 +91,6 @@ private String channelName;
 		        new InputStreamReader(con.getInputStream()));
 		JSONParser parser = new JSONParser();
 		JSONObject json = (JSONObject) parser.parse(in);
-		Channel.followers = (long) json.get("followers");
 			
 		
 		in.close();
@@ -92,8 +100,13 @@ private String channelName;
 	}
 	public String getChannelName(){
 		return channelName;
-		
 	}
+	/**
+	 * Get the title/status of the stream
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public String getStatus() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -120,14 +133,18 @@ private String channelName;
 			try {
 				result = "ChannelName: " + getChannelName() + "|Streaming: " + isStreaming() + "|" + "Status: " + getStatus() + "|" + "Followers: " + getFollowerCount();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return result;
 		}
+	/**
+	 * Get the language of the channel
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public String getLanguage() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -148,6 +165,14 @@ private String channelName;
 		in.close();
 		return (String)json.get("broadcaster_language");
 	}
+	/**
+	 * Get the URL of the channel
+	 * Example: http://twitch.tv/testuser
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public URL getURL() throws IOException, ParseException{
 		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();

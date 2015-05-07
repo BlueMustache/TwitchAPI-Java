@@ -3,8 +3,6 @@ package com.fillefilip8.twitchapi;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,7 +15,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -87,10 +84,8 @@ public class TwitchAPI {
 										+ "&redirect_uri=http://localhost:"
 										+ getPort() + "&scope=channel_read"));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (URISyntaxException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else {
@@ -164,7 +159,6 @@ public class TwitchAPI {
 			}
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					con.getInputStream()));
-			StringBuffer response = new StringBuffer();
 			JSONParser parser = new JSONParser();
 			JSONObject json = (JSONObject) parser.parse(in);
 
@@ -172,7 +166,6 @@ public class TwitchAPI {
 
 			System.out.println(json);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -213,12 +206,11 @@ public class TwitchAPI {
 	 * 
 	 * @param game
 	 *            Name of the game!
-	 * @param debug
-	 *            Should we debug all the data to the console?
 	 * @return ArrayList of all streamers
 	 * @throws IOException
 	 * @throws org.json.simple.parser.ParseException
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Stream> getAllGameStreamers(String game, int total,
 			int maxViewers) throws IOException,
 			org.json.simple.parser.ParseException {
@@ -240,7 +232,6 @@ public class TwitchAPI {
 		}
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
-		StringBuffer response = new StringBuffer();
 		JSONParser parser = new JSONParser();
 		JSONObject json = (JSONObject) parser.parse(in);
 
@@ -252,9 +243,6 @@ public class TwitchAPI {
 		JSONArray streams = (JSONArray) json.get("streams");
 
 		JSONObject channel;
-		JSONObject name;
-		// JSONArray streamsChannel = (JSONArray) ;
-
 		Iterator<JSONObject> streamsI = streams.iterator();
 		while (streamsI.hasNext()) {
 			for (int i = 0; i < streams.size(); i++) {
@@ -370,6 +358,7 @@ public class TwitchAPI {
 	 * @throws IOException
 	 * @throws org.json.simple.parser.ParseException
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Team> getAllTeams(int total, int offset)
 			throws IOException, ParseException {
 		List<Team> teamsList = new ArrayList<Team>();
@@ -387,7 +376,6 @@ public class TwitchAPI {
 		}
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
-		StringBuffer response = new StringBuffer();
 		JSONParser parser = new JSONParser();
 		JSONObject json = (JSONObject) parser.parse(in);
 

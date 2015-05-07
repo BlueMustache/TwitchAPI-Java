@@ -31,7 +31,6 @@ private String access_token;
 
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
-		StringBuffer response = new StringBuffer();
 		JSONParser parser = new JSONParser();
 		JSONObject json = (JSONObject) parser.parse(in);
 		
@@ -46,9 +45,7 @@ private String access_token;
 //		JSONArray streams= (JSONArray) json.get("streams");
 		JSONObject token = (JSONObject) json.get("token");
 
-	    JSONObject channel;
-	    JSONObject name;
-		//JSONArray streamsChannel = (JSONArray) ;
+	    //JSONArray streamsChannel = (JSONArray) ;
 	   // System.out.println("Username: " + token.get("user_name"));
 		return new Channel(token.get("user_name").toString());
 		
