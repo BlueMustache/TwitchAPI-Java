@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 
 public class Utils {
 	/*
-	 * TODO: Make the new TwitchAPI System easier.
+	 * Send a GET request to get data from the API
 	 */
 	public static JSONObject sendGETRequest(URL url) throws IOException, ParseException{
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();

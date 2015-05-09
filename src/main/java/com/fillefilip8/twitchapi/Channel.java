@@ -45,7 +45,7 @@ public class Channel {
 	 * @throws ParseException
 	 */
 	public boolean isStreaming() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -75,7 +75,7 @@ public class Channel {
 	 * @throws ParseException
 	 */
 	public long getFollowerCount() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -108,7 +108,7 @@ public class Channel {
 	 * @throws ParseException
 	 */
 	public String getStatus() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -146,7 +146,7 @@ public class Channel {
 	 * @throws ParseException
 	 */
 	public String getLanguage() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -174,7 +174,7 @@ public class Channel {
 	 * @throws ParseException
 	 */
 	public URL getURL() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -195,7 +195,7 @@ public class Channel {
 		return new URL((String)json.get("url"));
 	}
 	public boolean isPartner() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -216,7 +216,7 @@ public class Channel {
 		return (boolean)json.get("partner");
 	}
 	public long getViews() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/channels/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "channels/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");

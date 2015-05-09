@@ -15,6 +15,7 @@ public class Game {
 		this.name = name;
 	}
 	/**
+	 * Does this game exist on twitch?
 	 * TODO: Fix this
 	 * @return
 	 * @throws IOException
@@ -38,12 +39,16 @@ public class Game {
 	}
 	/**
 	 * Get the URL of the BoxArt image
-	 * @return URL of BoxArt
+	 * @return URL of BoxArt image
 	 * @throws MalformedURLException
 	 */
 	public URL getBoxArt() throws MalformedURLException{
 		return new URL("http://static-cdn.jtvnw.net/ttv-boxart/" + convertStringToURL() + "-272x380.jpg");		
 	}
+	/**
+	 * Replaces spaces with %20
+	 * @return
+	 */
 	public String convertStringToURL(){
 		return name.replaceAll(" ", "%20");
 	}

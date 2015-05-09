@@ -29,7 +29,7 @@ public class Stream {
 	 * Get the current viewers of the stream
 	 */
 	public long getViewers() throws IOException, ParseException {
-		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -53,7 +53,7 @@ public class Stream {
 	 * Get the current game that is being played on the stream
 	 */
 	public String getGame() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -92,7 +92,8 @@ public class Stream {
 	 * 480p
 	 */
 	public long getStreamQuality() throws IOException, ParseException{
-		URL url = new URL("https://api.twitch.tv/kraken/streams/" + channelName);
+		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
+	
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
 		con.setRequestMethod("GET");

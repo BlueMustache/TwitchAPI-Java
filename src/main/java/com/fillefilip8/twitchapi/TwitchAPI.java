@@ -30,7 +30,8 @@ public class TwitchAPI {
 	private List<String> scopes = new ArrayList<String>();
 	private String code;
 	private boolean isSetup;
-	static boolean debug = false;
+	public static boolean debug = false;
+	public static String baseURL = "https://api.twitch.tv/kraken/";
 
 	/**
 	 * Create a application on http://www.twitch.tv/settings/connections Make
@@ -56,7 +57,7 @@ public class TwitchAPI {
 	public String getClientID() {
 		return client_id;
 	}
-
+	
 	public int getPort() {
 		return port;
 	}
@@ -71,7 +72,6 @@ public class TwitchAPI {
 
 	public String getCode() {
 		return code;
-
 	}
 
 	public void authUser() {
@@ -198,15 +198,17 @@ public class TwitchAPI {
 		br.close();
 		out.close();
 		serverSock.close();
-
-		// lka6vahqgcxslurtpdabg0fv1ip8cc
 	}
 
 	/**
 	 * 
 	 * @param game
 	 *            Name of the game!
-	 * @return ArrayList of all streamers
+	 * @param total
+	 *            How many streamers should we get?
+	 * @param offset
+	 *            Offset
+	 * @return List of all streamers
 	 * @throws IOException
 	 * @throws org.json.simple.parser.ParseException
 	 */
@@ -218,16 +220,13 @@ public class TwitchAPI {
 		URL url = new URL("https://api.twitch.tv/kraken/streams?game=" + game
 				+ "&limit=" + total + "&offset=" + maxViewers);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-		// optional default is GET
 		con.setRequestMethod("GET");
-
-		// add request header
 		con.setRequestProperty(
 				"User-Agent",
 				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
 		int responseCode = con.getResponseCode();
 		if (TwitchAPI.debug) {
-			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("\nSending 'getAllGameStreamers' request to URL : " + url);
 			System.out.println("Response Code : " + responseCode);
 		}
 		BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -237,9 +236,6 @@ public class TwitchAPI {
 
 		in.close();
 
-		// print result
-		// get an array from the JSON object
-		// JSONArray streams= (JSONArray) json.get("streams");
 		JSONArray streams = (JSONArray) json.get("streams");
 
 		JSONObject channel;
@@ -251,13 +247,9 @@ public class TwitchAPI {
 
 				streamers.add(new Stream((String) channel.get("display_name")));
 
-				// System.out.println(streamers.get(i).getChannel().getFollowerCount());
-				// streamsI.remove();
 				if (TwitchAPI.debug) {
 					System.out.println("Added " + channel.get("display_name")
-							+ " to the ArrayList");
-					// String viewers =
-					// streamsI.next().get("viewers").toString();
+							+ " to the List");
 					System.out.println(channel.get("display_name")
 							+ " is playing " + channel.get("game")
 							+ "with title " + channel.get("status") + " for "
@@ -266,24 +258,8 @@ public class TwitchAPI {
 
 			}
 
-			/*
-			 * channel = (JSONObject) streams.get(i); JSONObject slide =
-			 * streams.iterator(); String title = (String)slide.get("title");
-			 * System.out.println(channel);
-			 */
-
 		}
 		return streamers;
-
-		// +streams.get(i)
-		// take the elements of the json array
-		/*
-		 * for(int i=0; i<streams.length(); i++){ streamsViewers =
-		 * streams.getJSONObject(i); streamsName = (JSONArray)
-		 * streams.getJSONArray(i); displayName = streamsName.getJSONObject(i);
-		 * System.out.println(channel.get(i) + " " +
-		 * streamsViewers.optString("viewers")); }
-		 */
 
 	}
 
@@ -297,7 +273,6 @@ public class TwitchAPI {
 	 */
 	public static Stream getRandomStream(String game, int maxViewers)
 			throws IOException, ParseException {
-		// https://api.twitch.tv/kraken/streams?game=Minecraft&limit=1&offset=1
 		//1
 		URL url1 = new URL("https://api.twitch.tv/kraken/streams?game=" + game
 				+ "&limit=1" + "&offset=" + 10000);
@@ -389,7 +364,7 @@ public class TwitchAPI {
 				teamsList.add(new Team((String) yay.get("name")));
 				if (TwitchAPI.debug) {
 					System.out.println("Added " + yay.get("name")
-							+ " to the ArrayList");
+							+ " to the List");
 				}
 
 			}
