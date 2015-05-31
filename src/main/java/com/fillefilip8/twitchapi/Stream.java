@@ -18,7 +18,7 @@ public class Stream {
 	}
 
 	/**
-	 * Get the channel of the stream
+	 * Get the channel object of the stream
 	 * 
 	 * @return
 	 */
@@ -52,7 +52,7 @@ public class Stream {
 	/**
 	 * Get the current game that is being played on the stream
 	 */
-	public String getGame() throws IOException, ParseException{
+	public Game getGame() throws IOException, ParseException{
 		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		// optional default is GET
@@ -71,7 +71,7 @@ public class Stream {
 		JSONObject json = (JSONObject) parser.parse(in);
 		in.close();
 		JSONObject stream = (JSONObject) json.get("stream");
-		return (String)stream.get("game");
+		return new Game((String)stream.get("game"));
 		
 	}
 	/**
@@ -90,15 +90,14 @@ public class Stream {
 	 * 1080p
 	 * 720p
 	 * 480p
+	 * 360p
 	 */
 	public long getStreamQuality() throws IOException, ParseException{
 		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
 	
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-		// optional default is GET
 		con.setRequestMethod("GET");
 
-		//add request header
 		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
 		int responseCode = con.getResponseCode();
 		if(TwitchAPI.debug){
@@ -112,6 +111,34 @@ public class Stream {
 		in.close();
 		JSONObject stream = (JSONObject) json.get("stream");
 		return (long)stream.get("video_height");
+	}
+	/*
+	 * Get the Average FPS of the stream
+	 * Examples:
+	 * 0 FPS (Yes this can happen sometimes)
+	 * 30 FPS
+	 * 60 FPS
+	 */
+	public double getAverageFPS() throws IOException, ParseException{
+		URL url = new URL(TwitchAPI.baseURL + "streams/" + channelName);
+		
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36");
+		int responseCode = con.getResponseCode();
+		if(TwitchAPI.debug){
+		System.out.println("\nSending 'average_fps' request for " + channelName + " with URL: " + url);
+		System.out.println("Response Code : " + responseCode);
+		}
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(in);
+		in.close();
+		JSONObject stream = (JSONObject) json.get("stream");
+		return (double)stream.get("average_fps");
+		
 	}
 
 }

@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 
 public class Utils {
 	/*
-	 * Send a GET request to get data from the API
+	 * Send a GET request to get data from the TwitchAPI
 	 */
 	public static JSONObject sendGETRequest(URL url) throws IOException, ParseException{
 		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -38,6 +38,13 @@ public class Utils {
 		int R = r.nextInt(max-min) + min;
 		return R;
 		
+	}
+	/**
+	 * Replaces spaces with %20
+	 * @return Converted string
+	 */
+	public static String convertStringToURL(String string){
+		return string.replaceAll(" ", "%20");
 	}
 	
 }
